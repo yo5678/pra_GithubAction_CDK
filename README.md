@@ -1,0 +1,2 @@
+# pra_github_action_lambda
+practice_for_github_action_for_lambda
