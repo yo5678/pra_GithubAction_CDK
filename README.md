@@ -210,5 +210,4 @@ add install ß
 
 # clean resource
 
-add cdk destroy --require-approval "never"
-
+delete cloudformation "cdk-workshop"
