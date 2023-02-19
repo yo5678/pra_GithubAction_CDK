@@ -1,0 +1,39 @@
+name:
+  cdk_action
+
+on:
+  push
+
+env:
+  AWS_ROLE_ARN: arn:aws:iam::980456935470:role/pra_GithubAction_CDK
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+      - name: aws cli install
+        run: |
+          pip install awscli --upgrade --user    
+          npm install -g aws-cdk
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }} arn:aws:iam::1234567890:role/example-role
+          role-session-name: samplerolesession
+          aws-region: ap-northeast-1
+      - name: deploy
+        run: |
+        cd cdk_workshop
+        cdk deploy --require-approval "never"
