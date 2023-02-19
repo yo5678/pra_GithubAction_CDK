@@ -4,9 +4,6 @@ name:
 on:
   push
 
-env:
-  AWS_ROLE_ARN: arn:aws:iam::980456935470:role/pra_GithubAction_CDK
-
 permissions:
   id-token: write
   contents: read
