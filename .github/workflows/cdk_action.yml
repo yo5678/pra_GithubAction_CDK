@@ -35,3 +35,4 @@ jobs:
         run: |
           cd cdk_workshop
           cdk deploy --require-approval "never"
+          cdk destroy

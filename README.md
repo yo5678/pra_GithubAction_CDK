@@ -181,6 +181,7 @@ I attach policy below.
 
 I write policy below.
 ~~~
+
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -191,11 +192,11 @@ I write policy below.
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
+                "StringLike": {
+                    "token.actions.githubusercontent.com:sub": "repo:{Github-accountname}/{repo-name}:*"
+                },
                 "StringEquals": {
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
-                },
-                "StringLike": {
-                    "token.actions.githubusercontent.com:sub": "repo:{Github-accountname}/{repo-name}:ref:refs/heads/{branch-name(you can use * )}"
                 }
             }
         }
@@ -203,11 +204,11 @@ I write policy below.
 }
 ~~~
 
+error occuer
+add install 
+"pip install aws-cdk-lib==2.65.0"
 
-error occur:Error: Not authorized to perform sts:AssumeRoleWithWebIdentity
+# clean resource
 
-https://dev.classmethod.jp/articles/create-iam-id-provider-for-github-actions-with-management-console/
-
-change
-"repo:{Github-accountname}/{repo-name}:ref:refs/heads/{branch-name(you can use * )}"→"repo:{Github-accountname}/{repo-name}:*"
+add cdk destroy 
 
