@@ -22,7 +22,8 @@ jobs:
           python -m pip install --upgrade pip
       - name: aws cli install
         run: |
-          pip install awscli --upgrade --user    
+          pip install awscli --upgrade --user 
+          pip install aws-cdk-lib==2.65.0   
           npm install -g aws-cdk
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
