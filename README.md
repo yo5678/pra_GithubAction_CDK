@@ -205,10 +205,10 @@ I write policy below.
 ~~~
 
 error occuer
-add install 
+add install ß
 "pip install aws-cdk-lib==2.65.0"
 
 # clean resource
 
-add cdk destroy 
+add cdk destroy --require-approval "never"
 
