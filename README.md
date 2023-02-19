@@ -202,3 +202,11 @@ I write policy below.
     ]
 }
 ~~~
+
+
+error occur:Error: Not authorized to perform sts:AssumeRoleWithWebIdentity
+
+https://dev.classmethod.jp/articles/create-iam-id-provider-for-github-actions-with-management-console/
+
+change
+"repo:{Github-accountname}/{repo-name}:ref:refs/heads/{branch-name(you can use * )}"→"repo:{Github-accountname}/{repo-name}:*"
