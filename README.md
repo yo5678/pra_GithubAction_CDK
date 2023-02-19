@@ -9,7 +9,10 @@ https://aws.amazon.com/jp/getting-started/guides/setup-cdk/module-two/
 https://cdkworkshop.com/30-python/20-create-project.html
 
 ## GithubAction
+https://dev.classmethod.jp/articles/deploying-the-aws-cdk-using-openid-connect-on-github-actions/
+https://docs.github.com/ja/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
 
+https://qiita.com/ohanamisan_Ba/items/cda91e01d3f871d8f4fb
 
 # Goal
 1. setting CDK(assume role)
@@ -57,7 +60,7 @@ you make new cdk-app. After perfomr this commmand, AWS start preparing　resourc
 https://dev.classmethod.jp/articles/cdk-bootstrap-modern-template/
 
 
-# make CDK-app
+# deploy CDK
 
 ~~~
 mkdir cdk_workshop && cd cdk_workshop
@@ -94,9 +97,9 @@ below two file is important in this app.
     app.synth()
 
   ~~~
-- cdk_workshop_stack.py
-  cdk_workshop is python module directory.
-  cdk_workshop_stack.py is below code and is refered by app.py.
+  - cdk_workshop_stack.py
+    cdk_workshop is python module directory.
+    cdk_workshop_stack.py is below code and is refered by app.py.
   ~~~
     from constructs import Construct
     from aws_cdk import (
@@ -147,4 +150,55 @@ aws-vault exec {Assumerole-RoleName} -- cdk deploy
 You want to clean resources, Please use below command.
 ~~~
 aws-vault exec {Assumerole-RoleName} -- cdk destroy  
+~~~
+
+# Github Action
+
+add ID -provider at AWS console. below URL refered.
+https://dev.classmethod.jp/articles/deploying-the-aws-cdk-using-openid-connect-on-github-actions/
+
+prameter is here
+- Provider type：OpenID Connect
+- Provider URL：https://token.actions.githubusercontent.com
+- Audience：sts.amazonaws.com
+
+making role for using GithubAction.
+
+I attach policy below.
+
+~~~
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+        }
+    ]
+}
+~~~
+
+I write policy below.
+~~~
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::{AWSaccount-number}:oidc-provider/token.actions.githubusercontent.com"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                },
+                "StringLike": {
+                    "token.actions.githubusercontent.com:sub": "repo:{Github-accountname}/{repo-name}:ref:refs/heads/{branch-name(you can use * )}"
+                }
+            }
+        }
+    ]
+}
 ~~~
