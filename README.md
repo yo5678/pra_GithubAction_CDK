@@ -55,7 +55,7 @@ cdk bootstrap aws://ACCOUNT-NUMBER/REGION
 ~~~
 
 What is boostrap:we need to perform this command just once when
-you make new cdk-app. After perfomr this commmand, AWS start preparing　resource that needs deploying.
+you make new cdk-app. After perform this commmand, AWS start preparing　resource that needs deploying.
 
 https://dev.classmethod.jp/articles/cdk-bootstrap-modern-template/
 
@@ -205,8 +205,56 @@ I write policy below.
 ~~~
 
 error occuer
-add install ß
+add install 
 "pip install aws-cdk-lib==2.65.0"
+
+## How to write .yaml 
+
+you have to make .github/workflows/cdk_action.yaml like below.
+
+- cdk_action.yaml
+~~~
+name:
+  cdk_action
+
+on:
+  push
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+      - name: aws cli install
+        run: |
+          pip install awscli --upgrade --user 
+          pip install aws-cdk-lib==2.65.0   
+          npm install -g aws-cdk
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }} 
+          role-session-name: samplerolesession
+          aws-region: ap-northeast-1
+      - name: deploy
+        run: |
+          cd cdk_workshop
+          cdk deploy --require-approval "never"
+          # cdk destroy --require-approval "never"
+~~~
+
+
 
 # clean resource
 
