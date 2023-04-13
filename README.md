@@ -1,6 +1,8 @@
 # pra_GithubAction_CDK
 practice　GithubAction and CDK
 
+this is note for me to study github actions.
+
 # reference
 
 ## CDK
